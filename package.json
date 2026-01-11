@@ -1,11 +1,11 @@
 {
-	"name": "com.noya.big",
-	"version": "1.0.0",
-	"displayName": "Big",
-	"description": "A Big Numbers library for incremental games.",
-	"unity": "6000.0",
-	"author": {
-		"name": "Marco Vincenzi",
-		"url": "https://github.com/ZykeDev"
-	}
+  "name": "com.noya.big",
+  "version": "1.0.1",
+  "displayName": "Big",
+  "description": "A Big Numbers library for incremental games.",
+  "unity": "6000.0",
+  "author": {
+    "name": "Marco Vincenzi",
+    "url": "https://github.com/ZykeDev"
+  }
 }
