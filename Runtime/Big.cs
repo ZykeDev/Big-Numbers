@@ -243,13 +243,13 @@ namespace Noya.BigNumbers
 	}
 
 	
-	public class NumberSmallerThanOneException : Exception
+	internal class NumberSmallerThanOneException : Exception
 	{
-		public NumberSmallerThanOneException() : base("Number is smaller than 1.") { }
+		internal NumberSmallerThanOneException() : base("Number is smaller than 1.") { }
 	}
 
-	public class ExceededBigException : Exception
+	internal class ExceededBigException : Exception
 	{
-		public ExceededBigException() : base($"Exceeded {nameof(Big)} type limit ({Big.TYPE_LIMIT}).") { }
+		internal ExceededBigException() : base($"Exceeded {nameof(Big)} type limit ({Big.TYPE_LIMIT}).") { }
 	}
 }
