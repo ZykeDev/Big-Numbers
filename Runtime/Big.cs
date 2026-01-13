@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEditor;
 
 namespace Noya.BigNumbers
 {
@@ -195,54 +194,7 @@ namespace Noya.BigNumbers
 		public override int GetHashCode() => HashCode.Combine(Base, Exponent);
 	}
 
-	[CustomPropertyDrawer(typeof(Big))]
-	public class BigIntDrawer : PropertyDrawer
-	{
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-		{
-			return EditorGUIUtility.singleLineHeight;
-		}
 
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-		{
-			// Tell Unity that the following properties belong together.
-			EditorGUI.BeginProperty(position, label, property);
-
-			// Draw the label
-			position = EditorGUI.PrefixLabel(position, label);
-
-			// Get the internal serialized properties
-			SerializedProperty baseProperty = property.FindPropertyRelative("Base");
-			SerializedProperty exponentProperty = property.FindPropertyRelative("Exponent");
-
-			// Determine the current value string to display
-
-			string currentStringValue = exponentProperty.uintValue > 0 
-				? $"{baseProperty.floatValue:F2}e{exponentProperty.uintValue}" 
-				: baseProperty.floatValue.ToString("F2");
-
-			// Create the text field, setting the input string
-			string newStringValue = EditorGUI.TextField(position, currentStringValue);
-
-			// Check if the user modified the string
-			if (newStringValue != currentStringValue)
-			{
-				// Attempt to parse the new input string using the static TryParse method
-				if (Big.TryParse(newStringValue, out Big parsedBigInt))
-				{
-					// If parsing is successful, update the serialized fields.
-					// This ensures the data is saved correctly in the Scriptable Object.
-					baseProperty.floatValue = parsedBigInt.Base;
-					exponentProperty.uintValue = parsedBigInt.Exponent;
-				}
-				// If parsing fails, the input is left in the text field, allowing the user to correct it.
-			}
-
-			EditorGUI.EndProperty();
-		}
-	}
-
-	
 	internal class NumberSmallerThanOneException : Exception
 	{
 		internal NumberSmallerThanOneException() : base("Number is smaller than 1.") { }

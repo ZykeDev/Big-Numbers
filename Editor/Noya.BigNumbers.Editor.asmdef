@@ -1,7 +1,9 @@
 {
     "name": "Noya.BigNumbers.Editor",
     "rootNamespace": "Noya.BigNumbers",
-    "references": [],
+    "references": [
+        "GUID:7b107fd1344e9404f883d07f7bd71f29"
+    ],
     "includePlatforms": [
         "Editor"
     ],
