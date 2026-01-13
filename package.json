@@ -4,6 +4,7 @@
   "displayName": "Big",
   "description": "A Big Numbers library for incremental games.",
   "unity": "6000.0",
+  "licensesUrl": "https://raw.githubusercontent.com/ZykeDev/Big-Numbers/refs/heads/main/LICENSE",
   "author": {
     "name": "Marco Vincenzi",
     "url": "https://github.com/ZykeDev"

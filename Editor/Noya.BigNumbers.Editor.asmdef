@@ -1,6 +1,6 @@
 {
-    "name": "com.noya.big.editor",
-    "rootNamespace": "Noya.Big.Editor",
+    "name": "Noya.BigNumbers.Editor",
+    "rootNamespace": "Noya.BigNumbers",
     "references": [],
     "includePlatforms": [
         "Editor"
