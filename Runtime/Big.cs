@@ -7,7 +7,7 @@ namespace Noya.BigNumbers
 	/// <summary>
 	/// Represents a scientific-notation number between 1 and 9.999e+4294967295 (<see cref="TYPE_LIMIT"/>).
 	/// </summary>
-	/// <remarks>A <see cref="Big"/> can never be lower than 1.0.</remarks>
+	/// <remarks>A <see cref="Big"/> can never be lower than 1.0, but it can be <see cref="Zero"/> or <see cref="Infinity"/>.</remarks>
 	[Serializable]
 	public struct Big : IEquatable<Big>
 	{
@@ -27,6 +27,8 @@ namespace Noya.BigNumbers
 		
 		public static Big MaxValue => new(9.999f, uint.MaxValue);
 		public static Big MinValue => 1u;
+		public static Big Zero => new(0);
+		public static float Infinity => Mathf.Infinity;
 
 		
 		public Big(float baseValue, uint exponentValue = 0u)
@@ -175,6 +177,19 @@ namespace Noya.BigNumbers
 			
 			return new Big(a.Base / b.Base, a.Exponent - b.Exponent);
 		}
+		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Big operator ^(Big a, float b)
+		{
+			// Zero bases always return 0
+			if (a.Base == 0) return 0;
+
+			// b * (log10(base) + exp)
+			double totalLog = b * (Math.Log10(a.Base) + a.Exponent);
+			uint newExp = (uint)Math.Floor(totalLog);
+			
+			return new Big(Mathf.Pow(10f, (float)(totalLog - newExp)), newExp);
+		}
 
 		public static Big operator +(Big a, uint b) => a + new Big(b);
 		public static Big operator -(Big a, uint b) => a - new Big(b);
@@ -188,6 +203,33 @@ namespace Noya.BigNumbers
 		public static bool operator >=(Big a, Big b) => a.Exponent != b.Exponent ? a.Exponent >= b.Exponent : a.Base >= b.Base;
 		public static bool operator <=(Big a, Big b) => a.Exponent != b.Exponent ? a.Exponent <= b.Exponent : a.Base <= b.Base;
 
+		/// <summary>
+		/// Converts a <see cref="Big"/> into an <see cref="int"/>.
+		/// </summary>
+		/// <remarks>If the realized <see cref="Big"/> would greater than <see cref="int.MaxValue"/>, returns <see cref="int.MaxValue"/>.</remarks>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static explicit operator int(Big a)
+		{
+			if (a.Exponent > Math.Log10(int.MaxValue))
+				return int.MaxValue;
+			
+			return (int)(a.Base * Mathf.Pow(10f, a.Exponent));
+		}
+
+		/// <summary>
+		/// Converts a <see cref="Big"/> into an <see cref="float"/>.
+		/// </summary>
+		/// <remarks>If the realized <see cref="Big"/> would greater than <see cref="float.MaxValue"/>, returns <see cref="float.MaxValue"/>.</remarks>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static explicit operator float(Big a)
+		{
+			if (a.Exponent > Math.Log10(float.MaxValue))
+				return float.MaxValue;
+			
+			return a.Base * Mathf.Pow(10f, a.Exponent);
+		}
+
+		
 		// ReSharper disable once Unity.BurstLoadingManagedType
 		public override bool Equals(object obj) => obj is Big other && Equals(other);
 		public bool Equals(Big other) => Base.Equals(other.Base) && Exponent == other.Exponent;
